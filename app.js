@@ -1,3 +1,8 @@
+/*
+*   TODO
+    - The download button will have to be applied as the photos appear
+*/
+
 "use strict";
 
 var buttonImage = "https://cdn2.iconfinder.com/data/icons/freecns-cumulus/16/519672-178_Download-128.png";
@@ -57,7 +62,7 @@ class ProfilePageDownloader {
         if (document.getElementsByClassName('download-media').length > 0) {
           document.getElementsByClassName('download-media')[0].href = mediaLink;
         } else {
-            document.getElementsByClassName('_s6yvg')[0].innerHTML = document.getElementsByClassName('_s6yvg')[0].innerHTML + '&nbsp;&nbsp;<a class="download-media" href="' + mediaLink + '" download="instagram.jpg"><img src="' + buttonImage + '" width="20"></a>';
+            document.getElementsByClassName('_s6yvg')[0].innerHTML += '&nbsp;&nbsp;<a class="download-media" href="' + mediaLink + '" download="instagram.jpg"><img src="' + buttonImage + '" width="20"></a>';
         }
     }
 }
@@ -75,13 +80,42 @@ class PhotoPageDownloader {
         if (document.getElementsByClassName('download-media').length > 0) {
           document.getElementsByClassName('download-media')[0].href = mediaLink;
         } else {
-            document.getElementsByClassName('_s6yvg')[0].innerHTML = document.getElementsByClassName('_s6yvg')[0].innerHTML + '&nbsp;&nbsp;<a class="download-media" href="' + mediaLink + '" download="instagram.jpg"><img src="' + buttonImage + '" width="20"></a>';
+            document.getElementsByClassName('_s6yvg')[0].innerHTML += '&nbsp;&nbsp;<a class="download-media" href="' + mediaLink + '" download="instagram.jpg"><img src="' + buttonImage + '" width="20"></a>';
         }
     }
 }
 
 class TimelineDownloader {
 
+    constructor() {
+        this.mediaLinksList = document.getElementsByClassName('_jjzlb');
+        this.headerList = document.getElementsByClassName('_s6yvg');
+        this.setDownloadLinks();
+    }
+
+    setDownloadLinks() {
+        var mediaLink = "";
+        var i = 0;
+        var headerCount = 0;
+
+        while(headerCount < this.headerList.length) {
+            //It's a video, the class for it in the timeline is not the same as the one for the photos
+            if(document.getElementsByClassName("_s6yvg")[headerCount].nextSibling.innerHTML.indexOf('_c8hkj') > -1) {
+                headerCount++;
+                continue;
+            }
+
+            mediaLink = this.mediaLinksList[i].getElementsByClassName('_icyx7')[0].getAttribute('src');
+            this.setDownloadButton(mediaLink, headerCount);
+
+            headerCount++;
+            i++;
+        }
+    }
+
+    setDownloadButton(mediaLink, e) {
+        document.getElementsByClassName('_s6yvg')[e].innerHTML += '&nbsp;&nbsp;<a class="download-media" href="' + mediaLink + '" download="instagram.jpg"><img src="' + buttonImage + '" width="20"></a>';
+    }
 }
 
 var url = window.location.href.toString();
@@ -90,7 +124,6 @@ var url = window.location.href.toString();
 if(url.indexOf("?taken-by=") > -1) {
     var profile = new ProfilePageDownloader();
 } else if (url.indexOf("/p/") > -1) {
-    console.log("Photo page");
     var photoPage = new PhotoPageDownloader();
 } else {
     console.log("Timeline");
