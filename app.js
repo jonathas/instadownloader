@@ -40,7 +40,6 @@ class ProfilePageDownloader {
             mediaCode = this.mediaLinksList[i].getAttribute("href").split("/")[2];
 
             if(mediaCode == mediaCodeUrl) {
-                console.log(this.mediaLinksList[i]);
                 mediaLink = this.mediaLinksList[i].getElementsByClassName('_icyx7')[0].getAttribute('src');
                 break;
             }
@@ -128,13 +127,10 @@ var instagramHome = "https://www.instagram.com/";
 function instantiateDownloader() {
     //Check if it is a photo opened in the profile page
     if(url.indexOf("?taken-by=") > -1) {
-        console.log("Profile");
         var profile = new ProfilePageDownloader();
     } else if (url.indexOf("/p/") > -1) {
-        console.log("PhotoPage");
         var photoPage = new PhotoPageDownloader();
     } else if(url == instagramHome) {
-        console.log("Timeline");
         var timeline = new TimelineDownloader();
     }
 }
@@ -144,11 +140,9 @@ function checkUrlChange() {
 
     //Has to be checked constantly in case the user scrolls the homepage
     if(urlCheck == instagramHome) {
-        console.log("Timeline");
         url = urlCheck;
         var timeline = new TimelineDownloader();
     } else if(url !== urlCheck) {
-        console.log("Changed!");
         url = urlCheck;
         instantiateDownloader();
     }
