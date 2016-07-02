@@ -1,8 +1,7 @@
-// This works now only for the photos opened from the profile page
 "use strict";
 
 var buttonImage = "https://cdn2.iconfinder.com/data/icons/freecns-cumulus/16/519672-178_Download-128.png";
-var context = "";
+let context = null;
 
 class ProfilePageDownloader {
 
@@ -10,7 +9,9 @@ class ProfilePageDownloader {
         this.mediaLinksList = document.getElementsByClassName('_8mlbc');
 
         this.setDownloadLink();
-        context = this;
+        if(!context) {
+            context = this;
+        }
 
         //Attach listeners
         document.getElementsByClassName("coreSpriteLeftPaginationArrow")[0].addEventListener("click",
@@ -61,4 +62,37 @@ class ProfilePageDownloader {
     }
 }
 
-var profile = new ProfilePageDownloader();
+class PhotoPageDownloader {
+    constructor() {
+        this.setDownloadLink();
+    }
+
+    setDownloadLink() {
+        this.setDownloadButton(document.getElementsByClassName('_icyx7')[0].getAttribute('src'));
+    }
+
+    setDownloadButton(mediaLink) {
+        if (document.getElementsByClassName('download-media').length > 0) {
+          document.getElementsByClassName('download-media')[0].href = mediaLink;
+        } else {
+            document.getElementsByClassName('_s6yvg')[0].innerHTML = document.getElementsByClassName('_s6yvg')[0].innerHTML + '&nbsp;&nbsp;<a class="download-media" href="' + mediaLink + '" download="instagram.jpg"><img src="' + buttonImage + '" width="20"></a>';
+        }
+    }
+}
+
+class TimelineDownloader {
+
+}
+
+var url = window.location.href.toString();
+
+//Check if it is a photo opened in the profile page
+if(url.indexOf("?taken-by=") > -1) {
+    var profile = new ProfilePageDownloader();
+} else if (url.indexOf("/p/") > -1) {
+    console.log("Photo page");
+    var photoPage = new PhotoPageDownloader();
+} else {
+    console.log("Timeline");
+    var timeline = new TimelineDownloader();
+}
