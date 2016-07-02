@@ -1,8 +1,3 @@
-/*
-*   TODO
-    - On the profile page, serve for download the full photo instead of the thumbnail
-*/
-
 "use strict";
 
 var buttonImage = "https://cdn2.iconfinder.com/data/icons/freecns-cumulus/16/519672-178_Download-128.png";
