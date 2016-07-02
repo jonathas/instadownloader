@@ -1,6 +1,6 @@
 /*
 *   TODO
-    - The download button will have to be applied as the photos appear
+    - On the profile page, serve for download the full photo instead of the thumbnail
 */
 
 "use strict";
@@ -40,6 +40,7 @@ class ProfilePageDownloader {
             mediaCode = this.mediaLinksList[i].getAttribute("href").split("/")[2];
 
             if(mediaCode == mediaCodeUrl) {
+                console.log(this.mediaLinksList[i]);
                 mediaLink = this.mediaLinksList[i].getElementsByClassName('_icyx7')[0].getAttribute('src');
                 break;
             }
@@ -114,18 +115,44 @@ class TimelineDownloader {
     }
 
     setDownloadButton(mediaLink, e) {
-        document.getElementsByClassName('_s6yvg')[e].innerHTML += '&nbsp;&nbsp;<a class="download-media" href="' + mediaLink + '" download="instagram.jpg"><img src="' + buttonImage + '" width="20"></a>';
+        //If the download button is now found, add it.
+        if(document.getElementsByClassName('_s6yvg')[e].innerHTML.indexOf('download-media') == -1) {
+            document.getElementsByClassName('_s6yvg')[e].innerHTML += '&nbsp;&nbsp;<a class="download-media" href="' + mediaLink + '" download="instagram.jpg"><img src="' + buttonImage + '" width="20"></a>';
+        }
     }
 }
 
 var url = window.location.href.toString();
+var instagramHome = "https://www.instagram.com/";
 
-//Check if it is a photo opened in the profile page
-if(url.indexOf("?taken-by=") > -1) {
-    var profile = new ProfilePageDownloader();
-} else if (url.indexOf("/p/") > -1) {
-    var photoPage = new PhotoPageDownloader();
-} else {
-    console.log("Timeline");
-    var timeline = new TimelineDownloader();
+function instantiateDownloader() {
+    //Check if it is a photo opened in the profile page
+    if(url.indexOf("?taken-by=") > -1) {
+        console.log("Profile");
+        var profile = new ProfilePageDownloader();
+    } else if (url.indexOf("/p/") > -1) {
+        console.log("PhotoPage");
+        var photoPage = new PhotoPageDownloader();
+    } else if(url == instagramHome) {
+        console.log("Timeline");
+        var timeline = new TimelineDownloader();
+    }
 }
+
+function checkUrlChange() {
+    var urlCheck = window.location.href.toString();
+
+    //Has to be checked constantly in case the user scrolls the homepage
+    if(urlCheck == instagramHome) {
+        console.log("Timeline");
+        url = urlCheck;
+        var timeline = new TimelineDownloader();
+    } else if(url !== urlCheck) {
+        console.log("Changed!");
+        url = urlCheck;
+        instantiateDownloader();
+    }
+}
+
+instantiateDownloader();
+window.setInterval(checkUrlChange, 500);
