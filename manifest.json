@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "instadown",
+  "name": "instadownloader",
   "description": "Shows a download button for each photo you see on Instagram",
   "version": "0.1",
   "content_scripts": [

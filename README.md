@@ -1,4 +1,4 @@
-# instadown
+# instadownloader
 
 A Google Chrome extension developed using vanilla Javascript which shows a download button for each photo you see on Instagram, so you can save them to yourself.
 
