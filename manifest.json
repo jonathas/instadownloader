@@ -1,11 +1,15 @@
 {
   "manifest_version": 2,
   "name": "instadown",
+  "description": "Shows a download button for each photo you see on Instagram",
   "version": "0.1",
   "content_scripts": [
       {
         "matches": ["https://www.instagram.com/*", "http://www.instagram.com/*"],
-        "js": ["app.js"]
+        "js": ["profilepagedownloader.js","photopagedownloader.js","timelinedownloader.js","app.js"]
       }
-  ]
+  ],
+  "browser_action": {
+      "default_icon": "icon.png"
+  }
 }
