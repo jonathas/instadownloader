@@ -1,11 +1,6 @@
-//Problema: Parou de funcionar para a tela de imagem unica
+// This works now only for the photos opened from the profile page
 
-var mediaLinks = document.getElementsByClassName('_8mlbc');
-
-var media = "";
-var mediaCode = "";
-var mediaCodeUrl = "";
-var downloadBtn = "";
+var mediaLinksList = document.getElementsByClassName('_8mlbc');
 var buttonImage = "https://cdn2.iconfinder.com/data/icons/freecns-cumulus/16/519672-178_Download-128.png";
 
 function init() {
@@ -22,48 +17,40 @@ function init() {
             setDownloadLink(e.target);
         }
     );
-}
+};
 
-// Bug: The 1st time I click an arrow, it's keeping the same link
 function setDownloadLink(e) {
+    var mediaCodeUrl = setMediaCodeUrl(e);
+    var mediaCode = "";
+    var mediaLink = "";
 
-    //Here we set the right download link if it's empty (first time)
-    if(mediaCodeUrl == "") {
-        mediaCodeUrl = window.location.href.toString().split(window.location.host)[1].split("/")[2];
-    }
-
-    //Had to get the link from the arrow because the new download link was being set before the URL would change
-    if(e !== undefined) {
-        mediaCodeUrl = e.getAttribute('href').split("/")[2];
-    }
-
-    for(i = 0; i < mediaLinks.length;i++) {
-        setMediaCode(i);
+    for(i = 0; i < mediaLinksList.length;i++) {
+        mediaCode = mediaLinksList[i].getAttribute("href").split("/")[2];
 
         if(mediaCode == mediaCodeUrl) {
-            media = mediaLinks[i].getElementsByClassName('_icyx7')[0].getAttribute('src');
+            mediaLink = mediaLinksList[i].getElementsByClassName('_icyx7')[0].getAttribute('src');
             break;
         }
     }
 
-    downloadBtn = '&nbsp;&nbsp;<a class="download-media" href="' + media + '" download="instagram.jpg"><img src="' + buttonImage + '" width="20"></a>';
-
-    setDownloadButton();
+    setDownloadButton(mediaLink);
 };
 
-function setMediaCode(e, code) {
-    if(e !== undefined) {
-        mediaCode = mediaLinks[e].getAttribute("href").split("/")[2];
+function setMediaCodeUrl(e) {
+    //Had to get the link from the arrow because the new download link was being set before the URL would change
+    if(e == undefined) {
+        return window.location.href.toString().split(window.location.host)[1].split("/")[2];
     } else {
-        mediaCode = code;
+        //Here we set the right download link if it's not coming from a click event (first time)
+        return e.getAttribute('href').split("/")[2];
     }
 };
 
-function setDownloadButton() {
+function setDownloadButton(mediaLink) {
     if (document.getElementsByClassName('download-media').length > 0) {
-      document.getElementsByClassName('download-media')[0].href = media;
+      document.getElementsByClassName('download-media')[0].href = mediaLink;
     } else {
-        document.getElementsByClassName('_s6yvg')[0].innerHTML = document.getElementsByClassName('_s6yvg')[0].innerHTML + downloadBtn;
+        document.getElementsByClassName('_s6yvg')[0].innerHTML = document.getElementsByClassName('_s6yvg')[0].innerHTML + '&nbsp;&nbsp;<a class="download-media" href="' + mediaLink + '" download="instagram.jpg"><img src="' + buttonImage + '" width="20"></a>';
     }
 };
 
